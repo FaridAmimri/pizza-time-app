@@ -1,0 +1,179 @@
+:root {
+  --vert: #1f7a3a;
+  --vert-fonce: #145a29;
+  --rouge: #c8102e;
+  --jaune: #fff27a;
+  --jaune-bord: #b59b00;
+  --barre: #dcdedc;
+  --ligne: #c4c8c4;
+  --encre: #1a211c;
+  --fond: #fbfbfa;
+  --blanc: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--encre);
+  font-family: var(--police-corps), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+:focus-visible { outline: 3px solid #0b57d0; outline-offset: 2px; }
+
+/* ---------- Structure générale ---------- */
+.entete {
+  background: var(--vert-fonce);
+  color: var(--blanc);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 0.6rem 1rem;
+}
+.entete-titre { font-family: var(--police-titres), sans-serif; font-weight: 700; font-size: 1.4rem; }
+.entete nav { display: flex; flex-wrap: wrap; gap: 0.35rem 1.25rem; }
+.entete a { color: var(--blanc); text-decoration: none; font-weight: 500; padding: 0.25rem 0; border-bottom: 2px solid transparent; }
+.entete a:hover { border-bottom-color: var(--blanc); }
+.entete a[aria-current="page"] { border-bottom-color: var(--blanc); font-weight: 600; }
+
+.page { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+h1 { font-family: var(--police-titres), sans-serif; font-size: 2rem; margin: 0.5rem 0; }
+.intro { max-width: 60ch; margin: 0 0 1.25rem; }
+
+/* ---------- Blocs : barre grise comme sur la fiche papier ---------- */
+.bloc { border: 1px solid var(--ligne); background: var(--blanc); margin-bottom: 1rem; border-radius: 4px; overflow: hidden; }
+.bloc > h2 {
+  margin: 0;
+  padding: 0.45rem 0.75rem;
+  background: var(--barre);
+  font-family: var(--police-titres), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.bloc-corps { padding: 0.75rem; }
+.grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.75rem; }
+
+/* ---------- Champs ---------- */
+.champ label { display: block; font-size: 0.85rem; margin-bottom: 0.2rem; color: #46514a; }
+.champ input {
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  font: inherit;
+  border: 1px solid var(--ligne);
+  border-radius: 4px;
+  background: var(--blanc);
+}
+/* Jaune = à vérifier, comme les cases surlignées de la fiche papier */
+.champ.douteux input { background: var(--jaune); border-color: var(--jaune-bord); }
+.note-douteux { font-size: 0.8rem; color: #6b5a00; font-weight: 600; }
+
+/* ---------- Employés ---------- */
+.employe { border-top: 1px solid var(--ligne); padding: 0.75rem 0; }
+.employe:first-child { border-top: 0; padding-top: 0; }
+.employe-tete { display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+.resume { margin: 0.6rem 0 0; font-size: 0.95rem; }
+
+/* ---------- Boutons ---------- */
+.bouton {
+  display: inline-block;
+  padding: 0.8rem 1.3rem;
+  border: 2px solid var(--vert);
+  border-radius: 4px;
+  background: var(--vert);
+  color: var(--blanc);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.bouton:hover { background: var(--vert-fonce); border-color: var(--vert-fonce); }
+.bouton.secondaire { background: var(--blanc); color: var(--vert-fonce); }
+.bouton.secondaire:hover { background: #eef5f0; }
+.lien { background: none; border: 0; color: var(--rouge); font: inherit; cursor: pointer; text-decoration: underline; padding: 0.25rem 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; }
+
+/* ---------- Écran de capture ---------- */
+.capture { max-width: 34rem; }
+.capture input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.capture label.bouton { font-size: 1.15rem; padding: 1.1rem 1.6rem; }
+.alerte { border-left: 5px solid var(--rouge); background: #fdecee; padding: 0.7rem 0.9rem; margin: 0 0 1rem; max-width: 60ch; }
+
+/* ---------- Vérification : photo à côté du formulaire ---------- */
+.verif { display: grid; gap: 1rem; }
+.apercu img { width: 100%; height: auto; border: 1px solid var(--ligne); border-radius: 4px; }
+@media (min-width: 960px) {
+  .verif { grid-template-columns: minmax(300px, 38%) 1fr; align-items: start; }
+  .apercu { position: sticky; top: 1rem; }
+}
+.barre-action {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding: 0.75rem;
+  background: var(--blanc);
+  border-top: 1px solid var(--ligne);
+  margin: 0 -0.25rem;
+}
+
+/* ---------- Tableaux ---------- */
+.tableau { width: 100%; border-collapse: collapse; }
+.tableau th { text-align: left; background: var(--barre); padding: 0.4rem 0.6rem; font-weight: 600; }
+.tableau td { padding: 0.4rem 0.6rem; border-bottom: 1px solid #e3e5e3; }
+.tableau .nombre { text-align: right; font-variant-numeric: tabular-nums; }
+.tableau tr.total td { font-weight: 600; border-top: 2px solid var(--encre); }
+.defilement { overflow-x: auto; }
+
+.ok { color: var(--vert-fonce); font-weight: 600; }
+.ecart-ko { color: var(--rouge); font-weight: 600; }
+.selecteur-mois { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: end; margin-bottom: 1rem; }
+.vide { padding: 1rem; background: var(--blanc); border: 1px dashed var(--ligne); border-radius: 4px; max-width: 60ch; }
+
+/* ---------- Vue d'ensemble ---------- */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.75rem; margin: 0 0 1rem; }
+.kpi { margin: 0; padding: 0.7rem 0.85rem; background: var(--blanc); border: 1px solid var(--ligne); border-radius: 4px; }
+.kpi dt { font-size: 0.85rem; color: #46514a; }
+.kpi dd { margin: 0; }
+.kpi .kpi-valeur { display: block; font-family: var(--police-titres), sans-serif; font-size: 2rem; font-weight: 700; line-height: 1.15; }
+.kpi .kpi-detail { display: block; font-size: 0.85rem; color: #46514a; }
+.kpi-attention { border-left: 5px solid var(--rouge); }
+.kpi-attention .kpi-valeur { color: var(--rouge); }
+
+.liste { margin: 0; padding: 0; list-style: none; }
+.liste li { padding: 0.45rem 0; border-top: 1px solid #e3e5e3; }
+.liste li:first-child { border-top: 0; padding-top: 0; }
+.liste a { color: var(--vert-fonce); font-weight: 600; }
+.puces { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.puce { padding: 0.2rem 0.65rem; border: 1px solid var(--ligne); border-radius: 999px; background: var(--fond); font-size: 0.9rem; }
+.note { margin: 0.6rem 0 0; max-width: 60ch; font-size: 0.9rem; color: #46514a; }
+
+/* ---------- Heures de l'équipe : feuille de pointage du mois ---------- */
+.grille-heures { border-collapse: separate; border-spacing: 0; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.grille-heures th, .grille-heures td { padding: 0.35rem 0.5rem; border-bottom: 1px solid #e3e5e3; text-align: center; white-space: nowrap; }
+.grille-heures thead th { background: var(--barre); font-weight: 600; }
+.grille-heures thead th:first-child, .grille-heures tbody th[scope="row"] { position: sticky; left: 0; z-index: 1; text-align: left; border-right: 1px solid var(--ligne); }
+.grille-heures tbody th[scope="row"] { background: var(--blanc); font-weight: 500; }
+.grille-heures td.incomplet { background: var(--jaune); }
+.grille-heures tr.total th, .grille-heures tr.total td { font-weight: 600; border-top: 2px solid var(--encre); }
+
+/* ---------- Photos archivées ---------- */
+.photos-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 0.75rem; margin: 0; padding: 0; list-style: none; }
+.photo-carte { display: block; width: 100%; padding: 0; overflow: hidden; border: 1px solid var(--ligne); border-radius: 4px; background: var(--blanc); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.photo-carte:hover { border-color: var(--vert); }
+.photo-carte img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: var(--barre); }
+.photo-carte span { display: block; padding: 0.4rem 0.6rem; font-weight: 500; }
+.dialogue { width: min(100% - 2rem, 62rem); max-height: 94vh; padding: 0; overflow: auto; border: 1px solid var(--ligne); border-radius: 6px; background: var(--blanc); color: var(--encre); }
+.dialogue::backdrop { background: rgba(26, 33, 28, 0.6); }
+.dialogue-corps { padding: 1rem; }
+.dialogue-corps h2 { margin: 0 0 0.75rem; font-family: var(--police-titres), sans-serif; font-size: 1.4rem; }
+.dialogue-corps img { display: block; width: 100%; max-height: 68vh; object-fit: contain; background: var(--barre); }
+
+/* ---------- Texte réservé aux lecteurs d'écran ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
