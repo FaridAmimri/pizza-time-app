@@ -5,6 +5,7 @@
  */
 import type { Fiche } from "@/domain/types";
 import { depotJson } from "./depot-json";
+import { depotPostgres } from "./depot-postgres";
 
 export interface DepotFiches {
   /** Fiches d'un mois ("2026-08"), triées par date. Sans argument : toutes. */
@@ -21,4 +22,5 @@ export interface DepotFiches {
   photo(date: string): Promise<Buffer | null>;
 }
 
-export const depot: DepotFiches = depotJson;
+/** En ligne (DATABASE_URL définie) : base Neon. En local sans variable : fichiers dans ./data. */
+export const depot: DepotFiches = process.env.DATABASE_URL ? depotPostgres : depotJson;

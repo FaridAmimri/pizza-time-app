@@ -1,5 +1,8 @@
 import { extraireFiche } from "@/services/extraction";
 
+/** La lecture d'une fiche prend environ 40 s : on laisse de la marge sur Vercel. */
+export const maxDuration = 120;
+
 export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ erreur: "Clé API manquante : renseignez ANTHROPIC_API_KEY dans .env.local." }, { status: 500 });
