@@ -35,7 +35,11 @@ body {
   gap: 0.5rem 1.5rem;
   padding: 0.6rem 1rem;
 }
-.entete-titre { font-family: var(--police-titres), sans-serif; font-weight: 700; font-size: 1.4rem; }
+.logo { display: inline-flex; align-items: center; gap: 0.6rem; }
+.logo-embleme { width: 2.4rem; height: 2.4rem; flex: none; }
+.logo-texte { display: flex; flex-direction: column; line-height: 1.05; }
+.logo-nom { font-family: var(--police-titres), sans-serif; font-weight: 700; font-size: 1.5rem; letter-spacing: 0.02em; text-transform: uppercase; }
+.logo-sous-titre { font-size: 0.85rem; opacity: 0.85; }
 .entete nav { display: flex; flex-wrap: wrap; gap: 0.35rem 1.25rem; }
 .entete a { color: var(--blanc); text-decoration: none; font-weight: 500; padding: 0.25rem 0; border-bottom: 2px solid transparent; }
 .entete a:hover { border-bottom-color: var(--blanc); }
