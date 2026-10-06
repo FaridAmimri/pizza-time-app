@@ -2,7 +2,7 @@
 
 Photo d'une fiche → lecture par Claude → vérification à l'écran → enregistrement → bilan du mois (heures par employé, recettes) → export Excel.
 
-**Démo en ligne :** [pizza-time-app-one.vercel.app](https://pizza-time-app-one.vercel.app) (accès protégé par un code).
+**Démo en ligne :** [pizza-time-app-one.vercel.app](https://pizza-time-app-one.vercel.app) (accès protégé par un code, fourni sur demande).
 
 ## Démarrer
 
@@ -13,7 +13,7 @@ npm run dev                    # http://localhost:3000
 npm test                       # tests des calculs
 ```
 
-Sur téléphone (même réseau) : ouvrir `http://<ip-de-votre-pc>:3000`. La caméra s'ouvre avec le bouton « Prendre une photo ».
+Sur téléphone : ouvrir la [démo en ligne](https://pizza-time-app-one.vercel.app) ou, en local (même réseau Wi-Fi), `http://<ip-de-votre-pc>:3000`. La caméra s'ouvre avec le bouton « Prendre une photo ».
 
 ## Où modifier quoi
 
