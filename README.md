@@ -2,6 +2,8 @@
 
 Photo d'une fiche → lecture par Claude → vérification à l'écran → enregistrement → bilan du mois (heures par employé, recettes) → export Excel.
 
+**Démo en ligne :** [pizza-time-app-one.vercel.app](https://pizza-time-app-one.vercel.app) (accès protégé par un code).
+
 ## Démarrer
 
 ```bash
