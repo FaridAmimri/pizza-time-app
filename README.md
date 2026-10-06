@@ -13,6 +13,8 @@ npm run dev                    # http://localhost:3000
 npm test                       # tests des calculs
 ```
 
+**Stockage :** sans `DATABASE_URL`, les fiches sont enregistrées dans un fichier JSON local. Avec `DATABASE_URL` (PostgreSQL, Neon en production), l'application utilise automatiquement la base.
+
 Sur téléphone : ouvrir la [démo en ligne](https://pizza-time-app-one.vercel.app) ou, en local (même réseau Wi-Fi), `http://<ip-de-votre-pc>:3000`. La caméra s'ouvre avec le bouton « Prendre une photo ».
 
 ## Où modifier quoi
@@ -23,7 +25,7 @@ Sur téléphone : ouvrir la [démo en ligne](https://pizza-time-app-one.vercel.a
 | Changer une formule de calcul                       | `src/domain/calculs.ts` (+ test dans `calculs.test.ts`) |
 | Adapter la lecture si la fiche papier change        | `src/services/prompt.ts`         |
 | Changer de modèle IA                                | variable `ANTHROPIC_MODEL`       |
-| Passer à PostgreSQL                                 | écrire `src/services/depot-postgres.ts` (interface `DepotFiches`), changer 1 ligne dans `depot.ts` |
+| Changer de base de données                          | Implémenter l'interface `DepotFiches` (voir `src/services/depot-postgres.ts`) ; le choix se fait dans `depot.ts` |
 | Modifier le fichier Excel exporté                   | `src/services/export-csv.ts`     |
 | Ajouter ou renommer un onglet                       | `src/components/Navigation.tsx` (1 ligne) + `src/app/<onglet>/page.tsx` |
 | Changer ce que montre la vue d'ensemble             | `src/app/page.tsx` (calculs dans `src/domain/calculs.ts`) |
@@ -48,7 +50,7 @@ Supprimer une fiche supprime aussi sa photo archivée. La date d'une fiche enreg
 - **L'IA lit, le code calcule.** Claude recopie seulement ce qui est écrit ; tous les totaux sont calculés dans `calculs.ts`.
 - **Une seule définition des données** (`types.ts`) : elle sert à l'IA, à la validation et à TypeScript.
 - **Toujours une étape de vérification humaine.** Les champs douteux sont en jaune ; un écart avec le total écrit sur la fiche est signalé en rouge.
-- **Stockage isolé** derrière une interface : le JSON du prototype se remplace sans toucher au reste.
+- **Stockage isolé** derrière une interface : JSON en local, PostgreSQL en production, interchangeables sans toucher au reste.
 
 ## Hypothèses à faire valider par le client
 
