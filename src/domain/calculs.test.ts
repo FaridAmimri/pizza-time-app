@@ -3,6 +3,8 @@ import {
   alertes,
   dureeMinutes,
   ecartCaisse,
+  ecartMatin,
+  formatHM,
   grilleHeures,
   heuresEmploye,
   joursDuMois,
@@ -10,6 +12,7 @@ import {
   minutesEquipe,
   recapMois,
   totalEnCaisse,
+  versMinutes,
 } from "./calculs";
 import { ficheVide } from "./fiche-vide";
 
@@ -107,5 +110,34 @@ describe("calculs", () => {
     expect(sami?.acomptes).toBe(40);
     const lina = grille.find((l) => l.nom === "Lina");
     expect(lina?.joursIncomplets).toEqual(["2026-08-29", "2026-08-30"]);
+  });
+
+  it("heures saisies : formats invalides ignorés", () => {
+    expect(versMinutes(" 9:05 ")).toBe(545);
+    expect(versMinutes("24:00")).toBeNull();
+    expect(versMinutes("10:60")).toBeNull();
+    expect(versMinutes("10h30")).toBeNull();
+    expect(versMinutes("")).toBeNull();
+    expect(formatHM(545)).toBe("09:05");
+  });
+
+  it("caisse du matin : écart avec le total écrit, null si rien d'écrit", () => {
+    const f = ficheExemple(); // 100 + 20 + 50 = 170, écrit 170
+    expect(ecartMatin(f)).toBe(0);
+    f.matin.totalEnCaisse = 160;
+    expect(ecartMatin(f)).toBe(10);
+    f.matin.totalEnCaisse = null;
+    expect(ecartMatin(f)).toBeNull();
+    f.totauxEcrits.totalEnCaisse = null;
+    expect(ecartCaisse(f)).toBeNull();
+  });
+
+  it("montants à centimes : pas d'erreur d'arrondi flottant", () => {
+    const f = ficheExemple();
+    f.matin = { totalEnBon: null, totalEnCaisse: null, especes: 0.1, ticketRestaurant: null, carteBancaire: null };
+    f.soir = { especes: 0.2, ticketRestaurant: null, carteBancaire: null, chequeVacance: null, dishopEnLigne: null };
+    f.achats = null;
+    f.employes = [];
+    expect(totalEnCaisse(f)).toBe(0.3);
   });
 });
