@@ -29,7 +29,8 @@ export default defineConfig({
   workers: 1,
   forbidOnly: !!process.env.CI, // un test.only oublié fait échouer la CI
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? [["html", { open: "never" }], ["github"]] : "list",
+  // Rapport HTML toujours généré (npx playwright show-report) ; annotations GitHub en plus dans la CI.
+  reporter: [[process.env.CI ? "github" : "list"], ["html", { open: "never" }]],
   use: {
     trace: "retain-on-failure", // en cas d'échec : capture pas à pas, consultable dans le rapport
     locale: "fr-FR",
