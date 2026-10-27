@@ -1,5 +1,4 @@
-import { test } from "node:test";
-import assert from "node:assert/strict";
+import { describe, expect, it } from "vitest";
 import {
   alertes,
   dureeMinutes,
@@ -28,83 +27,85 @@ function ficheExemple() {
   return f;
 }
 
-test("durée : passage de minuit", () => {
-  assert.equal(dureeMinutes("18:00", "00:30"), 390);
-  assert.equal(dureeMinutes("10:00", "14:30"), 270);
-  assert.equal(dureeMinutes(null, "14:30"), 0);
-});
+describe("calculs", () => {
+  it("durée : passage de minuit", () => {
+    expect(dureeMinutes("18:00", "00:30")).toBe(390);
+    expect(dureeMinutes("10:00", "14:30")).toBe(270);
+    expect(dureeMinutes(null, "14:30")).toBe(0);
+  });
 
-test("heures d'un employé + détection d'oubli", () => {
-  const f = ficheExemple();
-  assert.deepEqual(heuresEmploye(f.employes[0]), { matin: 270, soir: 390, journee: 660, incomplet: false });
-  assert.equal(heuresEmploye(f.employes[2]).incomplet, true);
-});
+  it("heures d'un employé + détection d'oubli", () => {
+    const f = ficheExemple();
+    expect(heuresEmploye(f.employes[0])).toEqual({ matin: 270, soir: 390, journee: 660, incomplet: false });
+    expect(heuresEmploye(f.employes[2]).incomplet).toBe(true);
+  });
 
-test("total en caisse = espèces + tickets + CB + Dishop + acomptes + achats", () => {
-  const f = ficheExemple();
-  // 300 + 50 + 200 + 40 + 20 + 15 = 625
-  assert.equal(totalEnCaisse(f), 625);
-  assert.equal(ecartCaisse(f), 0);
-  f.totauxEcrits.totalEnCaisse = 600;
-  assert.equal(ecartCaisse(f), 25);
-});
+  it("total en caisse = espèces + tickets + CB + Dishop + acomptes + achats", () => {
+    const f = ficheExemple();
+    // 300 + 50 + 200 + 40 + 20 + 15 = 625
+    expect(totalEnCaisse(f)).toBe(625);
+    expect(ecartCaisse(f)).toBe(0);
+    f.totauxEcrits.totalEnCaisse = 600;
+    expect(ecartCaisse(f)).toBe(25);
+  });
 
-test("bilan du mois : regroupe un même employé écrit différemment", () => {
-  const r = recapMois([ficheExemple(), ficheExemple()]);
-  assert.equal(r.nbFiches, 2);
-  assert.equal(r.recettes.totalEnCaisse, 1250);
-  const sami = r.employes.find((e) => e.nom === "Sami");
-  assert.equal(sami?.journee, 2 * (660 + 180));
-  assert.equal(sami?.acomptes, 40);
-  assert.equal(r.employes.length, 2);
-});
+  it("bilan du mois : regroupe un même employé écrit différemment", () => {
+    const r = recapMois([ficheExemple(), ficheExemple()]);
+    expect(r.nbFiches).toBe(2);
+    expect(r.recettes.totalEnCaisse).toBe(1250);
+    const sami = r.employes.find((e) => e.nom === "Sami");
+    expect(sami?.journee).toBe(2 * (660 + 180));
+    expect(sami?.acomptes).toBe(40);
+    expect(r.employes.length).toBe(2);
+  });
 
-test("jours du mois, y compris février bissextile", () => {
-  assert.equal(joursDuMois("2026-10").length, 31);
-  assert.equal(joursDuMois("2028-02").length, 29);
-  assert.equal(joursDuMois("2026-02").length, 28);
-  assert.equal(joursDuMois("2026-10")[0], "2026-10-01");
-  assert.equal(joursDuMois("2026-10")[30], "2026-10-31");
-});
+  it("jours du mois, y compris février bissextile", () => {
+    expect(joursDuMois("2026-10").length).toBe(31);
+    expect(joursDuMois("2028-02").length).toBe(29);
+    expect(joursDuMois("2026-02").length).toBe(28);
+    expect(joursDuMois("2026-10")[0]).toBe("2026-10-01");
+    expect(joursDuMois("2026-10")[30]).toBe("2026-10-31");
+  });
 
-test("jours sans fiche : ignore le futur", () => {
-  const f = ficheExemple(); // 2026-08-29
-  const manquants = joursSansFiche("2026-08", [f], "2026-08-31");
-  assert.equal(manquants.length, 30);
-  assert.equal(manquants.includes("2026-08-29"), false);
-  assert.deepEqual(joursSansFiche("2026-08", [f], "2026-08-02"), ["2026-08-01", "2026-08-02"]);
-  assert.deepEqual(joursSansFiche("2026-08", [], "2026-07-31"), []);
-});
+  it("jours sans fiche : ignore le futur", () => {
+    const f = ficheExemple(); // 2026-08-29
+    const manquants = joursSansFiche("2026-08", [f], "2026-08-31");
+    expect(manquants.length).toBe(30);
+    expect(manquants.includes("2026-08-29")).toBe(false);
+    expect(joursSansFiche("2026-08", [f], "2026-08-02")).toEqual(["2026-08-01", "2026-08-02"]);
+    expect(joursSansFiche("2026-08", [], "2026-07-31")).toEqual([]);
+  });
 
-test("minutes de l'équipe sur une fiche", () => {
-  // Sami 660 + Sami (même nom, autre ligne) 180 + Lina (heure manquante) 0
-  assert.equal(minutesEquipe(ficheExemple()), 840);
-});
+  it("minutes de l'équipe sur une fiche", () => {
+    // Sami 660 + Sami (même nom, autre ligne) 180 + Lina (heure manquante) 0
+    expect(minutesEquipe(ficheExemple())).toBe(840);
+  });
 
-test("alertes : écart de caisse et heure manquante", () => {
-  const ok = ficheExemple();
-  ok.employes = ok.employes.slice(0, 2);
-  assert.deepEqual(alertes([ok]), []);
+  it("alertes : écart de caisse et heure manquante", () => {
+    const ok = ficheExemple();
+    ok.employes = ok.employes.slice(0, 2);
+    expect(alertes([ok])).toEqual([]);
 
-  const ko = ficheExemple();
-  ko.totauxEcrits.totalEnCaisse = 600;
-  assert.deepEqual(alertes([ko]), [
-    { type: "ecart-caisse", date: "2026-08-29", ecart: 25 },
-    { type: "heure-manquante", date: "2026-08-29", employes: ["Lina"] },
-  ]);
-});
+    const ko = ficheExemple();
+    ko.totauxEcrits.totalEnCaisse = 600;
+    expect(alertes([ko])).toEqual([
+      { type: "ecart-caisse", date: "2026-08-29", ecart: 25 },
+      { type: "heure-manquante", date: "2026-08-29", employes: ["Lina"] },
+    ]);
+  });
 
-test("grille d'heures : regroupe par employé et par jour", () => {
-  const f1 = ficheExemple();
-  const f2 = ficheExemple();
-  f2.date = "2026-08-30";
-  const grille = grilleHeures([f1, f2]);
-  assert.equal(grille.length, 2);
-  const sami = grille.find((l) => l.nom === "Sami");
-  assert.equal(sami?.parJour["2026-08-29"], 840);
-  assert.equal(sami?.parJour["2026-08-30"], 840);
-  assert.equal(sami?.total, 1680);
-  assert.equal(sami?.acomptes, 40);
-  const lina = grille.find((l) => l.nom === "Lina");
-  assert.deepEqual(lina?.joursIncomplets, ["2026-08-29", "2026-08-30"]);
+  it("grille d'heures : regroupe par employé et par jour", () => {
+    const f1 = ficheExemple();
+    const f2 = ficheExemple();
+    f2.date = "2026-08-30";
+    const grille = grilleHeures([f1, f2]);
+    expect(grille.length).toBe(2);
+    const sami = grille.find((l) => l.nom === "Sami");
+    expect(sami?.parJour["2026-08-29"]).toBe(840);
+    expect(sami?.parJour["2026-08-30"]).toBe(840);
+    expect(sami?.total).toBe(1680);
+    expect(sami?.acomptes).toBe(40);
+    const lina = grille.find((l) => l.nom === "Lina");
+    expect(lina?.joursIncomplets).toEqual(["2026-08-29", "2026-08-30"]);
+  });
 });

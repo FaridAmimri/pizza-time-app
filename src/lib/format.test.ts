@@ -1,20 +1,21 @@
-import { test } from "node:test";
-import assert from "node:assert/strict";
+import { describe, expect, it } from "vitest";
 import { dateFr, formatHCourt, formatHeures } from "./format";
 
-test("formatHeures : heures pleines et minutes sur deux chiffres", () => {
-  assert.equal(formatHeures(0), "0 h");
-  assert.equal(formatHeures(120), "2 h");
-  assert.equal(formatHeures(450), "7 h 30");
-  assert.equal(formatHeures(65), "1 h 05");
-});
+describe("format", () => {
+  it("formatHeures : heures pleines et minutes sur deux chiffres", () => {
+    expect(formatHeures(0)).toBe("0 h");
+    expect(formatHeures(120)).toBe("2 h");
+    expect(formatHeures(450)).toBe("7 h 30");
+    expect(formatHeures(65)).toBe("1 h 05");
+  });
 
-test("formatHCourt : version compacte", () => {
-  assert.equal(formatHCourt(120), "2h");
-  assert.equal(formatHCourt(450), "7h30");
-  assert.equal(formatHCourt(65), "1h05");
-});
+  it("formatHCourt : version compacte", () => {
+    expect(formatHCourt(120)).toBe("2h");
+    expect(formatHCourt(450)).toBe("7h30");
+    expect(formatHCourt(65)).toBe("1h05");
+  });
 
-test("dateFr : AAAA-MM-JJ vers JJ/MM/AAAA", () => {
-  assert.equal(dateFr("2026-08-29"), "29/08/2026");
+  it("dateFr : AAAA-MM-JJ vers JJ/MM/AAAA", () => {
+    expect(dateFr("2026-08-29")).toBe("29/08/2026");
+  });
 });
