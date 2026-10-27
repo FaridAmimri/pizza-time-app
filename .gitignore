@@ -6,3 +6,6 @@ next-env.d.ts
 .vercel
 *.zip
 *.tsbuildinfo
+coverage/
+test-results/
+playwright-report/
