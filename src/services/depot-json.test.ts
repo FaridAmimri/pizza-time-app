@@ -1,21 +1,11 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
+import { utiliserDepotTemporaire } from "../../tests/depot-temporaire";
 import { ficheExemple } from "../../tests/fixtures";
 import { depotJson } from "./depot-json";
 
-/** Chaque test travaille dans un dossier temporaire neuf : aucun effet sur ./data. */
-let dossier: string;
-
-beforeEach(async () => {
-  dossier = await mkdtemp(path.join(tmpdir(), "fiches-test-"));
-  vi.stubEnv("DOSSIER_DONNEES", dossier);
-});
-
-afterEach(async () => {
-  await rm(dossier, { recursive: true, force: true });
-});
+const { dossier } = utiliserDepotTemporaire();
 
 describe("depotJson", () => {
   it("dossier vide : aucune fiche, aucune photo", async () => {
@@ -28,7 +18,7 @@ describe("depotJson", () => {
   it("sauvegarder puis trouver : même fiche, écrite dans le bon dossier", async () => {
     await depotJson.sauvegarder(ficheExemple());
     expect(await depotJson.trouver("2026-08-29")).toEqual(ficheExemple());
-    const brut = JSON.parse(await readFile(path.join(dossier, "fiches.json"), "utf-8"));
+    const brut = JSON.parse(await readFile(path.join(dossier(), "fiches.json"), "utf-8"));
     expect(Object.keys(brut)).toEqual(["2026-08-29"]);
   });
 
