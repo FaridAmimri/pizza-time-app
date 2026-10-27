@@ -10,12 +10,22 @@ Photo d'une fiche → lecture par Claude → vérification à l'écran → enreg
 npm install
 cp .env.example .env.local     # puis coller votre clé ANTHROPIC_API_KEY
 npm run dev                    # http://localhost:3000
-npm test                       # tests des calculs
 ```
 
 **Stockage :** sans `DATABASE_URL`, les fiches sont enregistrées dans un fichier JSON local. Avec `DATABASE_URL` (PostgreSQL, Neon en production), l'application utilise automatiquement la base.
 
 Sur téléphone : ouvrir la [démo en ligne](https://pizza-time-app-one.vercel.app) ou, en local (même réseau Wi-Fi), `http://<ip-de-votre-pc>:3000`. La caméra s'ouvre avec le bouton « Prendre une photo ».
+
+## Tests
+
+```bash
+npm test                 # tests unitaires, intégration et composants (Vitest)
+npm run test:coverage    # avec rapport de couverture (coverage/index.html)
+npm run test:e2e         # build + parcours dans un vrai navigateur (Playwright)
+```
+
+Claude et la base Neon sont toujours simulés : aucune clé n'est nécessaire. Les tests tournent sur chaque pull request (GitHub Actions).
+Stratégie, risques couverts et critères de validation d'une version : [docs/PLAN-DE-TESTS.md](docs/PLAN-DE-TESTS.md).
 
 ## Où modifier quoi
 
