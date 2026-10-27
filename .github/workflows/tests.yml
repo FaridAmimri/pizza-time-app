@@ -1,0 +1,57 @@
+# Vérifie chaque push et chaque pull request. Aucun secret : Claude et la base sont simulés dans les tests.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Une nouvelle poussée sur la même branche annule la vérification précédente, devenue inutile.
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  unitaires:
+    name: Typage et tests unitaires
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm # réutilise le cache npm entre deux exécutions
+      - run: npm ci # installe exactement les versions du package-lock.json
+      - run: npm run typecheck
+      - run: npm run test:coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: couverture
+          path: coverage/
+          retention-days: 14
+
+  e2e:
+    name: Build et tests de bout en bout
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium # navigateur + bibliothèques système
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always() # surtout utile en cas d'échec : traces et captures pas à pas
+        with:
+          name: rapport-playwright
+          path: playwright-report/
+          retention-days: 14
